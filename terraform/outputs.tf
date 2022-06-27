@@ -1,3 +1,3 @@
 output "fqdn" {
-  value = azurerm_public_ip.example.fqdn 
+  value = azurerm_public_ip.devbox.fqdn 
 }
