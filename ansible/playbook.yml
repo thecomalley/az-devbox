@@ -1,0 +1,14 @@
+---
+- hosts: node1
+  remote_user: root
+
+  tasks:
+  - name: Install the Microsoft package repository GPG key
+    ansible.builtin.apt_repository:
+      repo: deb https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+
+  - name: Install the Core Tools package
+    apt:
+      update_cache: yes
+      name: azure-functions-core-tools-4
