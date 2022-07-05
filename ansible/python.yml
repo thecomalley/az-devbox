@@ -1,0 +1,18 @@
+---
+- hosts: devbox
+  remote_user: adminuser
+
+  tasks:
+  - name: Add deadsnakes repository
+    become: true 
+    ansible.builtin.apt_repository:
+      repo: ppa:deadsnakes/ppa
+
+  - name: Install requirements
+    become: true
+    package:
+      name:
+        - python3.9
+        - python3.9-venv
+        - virtualenv
+      state: present
