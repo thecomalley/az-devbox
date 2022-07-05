@@ -1,0 +1,32 @@
+---
+- hosts: devbox
+  remote_user: adminuser
+
+  tasks:
+  - name: Install dependencies
+    become: yes
+    ansible.builtin.apt:
+      pkg:
+      - ca-certificates
+      - curl
+      - apt-transport-https
+      - lsb-release
+      - gnupg
+
+  - name: Add Microsoft APT key
+    apt_key:
+      url: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+    become: yes
+
+  - name: Add Azure CLI software repository
+    become: yes
+    ansible.builtin.apt_repository:
+      repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_distribution_release }} main
+      state: present
+
+  - name: Install Azure CLI
+    become: yes
+    ansible.builtin.apt:
+      name: azure-cli
+      update_cache: yes
