@@ -29,4 +29,5 @@
       name: terraform
       state: latest
       update_cache: yes
+    become: yes
 
