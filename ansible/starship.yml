@@ -1,0 +1,35 @@
+---
+- hosts: devbox
+
+  tasks:
+    - name: Get starship install script
+      get_url:
+        url: https://starship.rs/install.sh
+        dest: /tmp/starship_install.sh
+        mode: '0755'
+
+    - name: Install starship
+      shell:
+        cmd: /tmp/starship_install.sh --yes
+        executable: /bin/sh
+      become: yes
+
+    - name: Enable in bash
+      lineinfile:
+        path: "{{ lookup('env', 'HOME') }}/.bashrc"
+        line: "eval \"$(starship init bash)\""
+        create: yes
+
+    - name: create config directory
+      file:
+        path: "{{ ansible_user_dir }}/.config/"
+        state: directory
+
+    - name: Print the gateway for each host when defined
+      ansible.builtin.debug:
+        msg: "playbook_dir: {{ playbook_dir }} ansible_user_dir: {{ ansible_user_dir }}"
+
+    - name: copy files
+      copy:
+        src: "{{ playbook_dir }}/files/starship.toml"
+        dest: "{{ ansible_user_dir }}/.config/starship.toml"
